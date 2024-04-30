@@ -111,7 +111,7 @@ public class LevelCreator : MonoBehaviour
 
         //Calculating Height and Width from text file
         height = lines.Length;
-        width = lines[0].Length - 1;
+        width = lines[0].Length;
 
         // CellSize Formula 
         cellSize = 100.0f / (width);
