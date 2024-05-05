@@ -65,7 +65,7 @@ class FieldOfVision : MonoBehaviour
         }
 
         // FIXME : Temporal fix
-        transform.Rotate(Vector3.forward, 180)
+        transform.Rotate(Vector3.forward, 180);
 
         mesh.vertices = vertices;
         mesh.uv = uv;
