@@ -53,7 +53,7 @@ public class LevelCreator : MonoBehaviour
                 {
                     // Prisoner
                     var prisoner = Instantiate(prisonerPrefab, agentsSpawn);
-                    prisoner.transform.localPosition = new Vector3(x * cellSize, 0.0f, y * cellSize);
+                    prisoner.transform.localPosition = new Vector3(x * cellSize, 1, y * cellSize);
                     prisoner.transform.localScale *= cellSize;
                     prisoner.name = "Prisoner" + prisonerCounter;
                     prisonerCounter++;
@@ -63,7 +63,7 @@ public class LevelCreator : MonoBehaviour
                 {
                     // Guard
                     var guard = Instantiate(guardPrefab, agentsSpawn);
-                    guard.transform.localPosition = new Vector3(x * cellSize, 0.0f, y * cellSize);
+                    guard.transform.localPosition = new Vector3(x * cellSize, 1, y * cellSize);
                     guard.transform.localScale *= cellSize;
                     guard.name = "Guard" + guardCounter;
                     guardCounter++;
