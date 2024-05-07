@@ -1,24 +1,28 @@
 
 
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Agent : MonoBehaviour {
 
-    private Vector3 target;
-    private NavMeshAgent agent;
+    protected Vector3 target;
+    protected NavMeshAgent agent;
 
     [Header("Agent Settings")]
     [SerializeField] private float speed = 10f;
     [SerializeField] private float angularSpeed = 120f;
 
-    private void Start() {
-        target = GameObject.Find("Exit").transform.position;
+    protected void Start() {
+        /* List<GameObject> rooms = GameObject.FindGameObjectsWithTag("Rooms").ToList();
+        target = rooms[Random.Range(0, rooms.Count)].transform.position; */
         agent = GetComponent<NavMeshAgent>();
         agent.speed = speed;
         agent.angularSpeed = angularSpeed;
-        agent.SetDestination(target);
+        /* agent.SetDestination(target); */
     }
 
+    
 
 }
