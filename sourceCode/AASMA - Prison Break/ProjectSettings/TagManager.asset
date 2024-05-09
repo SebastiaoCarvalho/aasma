@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Prisoner
   - Guard
+  - RoomWaypoint
   layers:
   - Default
   - TransparentFX
