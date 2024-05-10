@@ -5,57 +5,58 @@ using System.Linq;
 
 public class Prisoner : Agent
 {
-    List<List<int>> roomConnections = new List<List<int>>();
+    
     [SerializeField] List<GameObject> roomWaypoints = new List<GameObject>();
+    private Action currentAction;
 
     int currentRoom = 2;
 
-    // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
         base.Start();
-        roomConnections.Add(new List<int> {2, 5, 6});
-        roomConnections.Add(new List<int> {1, 3});
-        roomConnections.Add(new List<int> {4, 7, 17});
-        roomConnections.Add(new List<int> {3, 5, 14});
-        roomConnections.Add(new List<int> {1, 4});
-        roomConnections.Add(new List<int> {1, 10, 14});
-        roomConnections.Add(new List<int> {3, 8, 15, 16});
-        roomConnections.Add(new List<int> {7, 9, 15, 17});
-        roomConnections.Add(new List<int> {8, 11, 13, 16});
-        roomConnections.Add(new List<int> {6, 11, 12});
-        roomConnections.Add(new List<int> {9, 10});
-        roomConnections.Add(new List<int> {10, 13});
-        roomConnections.Add(new List<int> {9, 12});
-        roomConnections.Add(new List<int> {4, 6});
-        roomConnections.Add(new List<int> {7, 8, 16});
-        roomConnections.Add(new List<int> {7, 9, 15});
-        roomConnections.Add(new List<int> {3, 8});
         roomWaypoints = GameObject.FindGameObjectsWithTag("RoomWaypoint").OrderBy(waypoint => waypoint.name).ToList();
         Debug.Log(roomWaypoints);
-        chooseAction();
+        ChooseAction();
     }
 
-    void chooseAction() {
-        moveTo(roomConnections[currentRoom - 1][Random.Range(0, roomConnections[currentRoom - 1].Count)]);
+    void ChooseAction() {
+        List<Action> actions = GetAvailableActions();
+        Action best = null;
+        float bestScore = Mathf.NegativeInfinity;
+        foreach (Action action in actions) {
+            float score = action.Utility();
+            if (score > bestScore) {
+                best = action;
+                bestScore = score;
+            }
+        }
+        Debug.LogFormat("Best action: {0} with utility {1}", best, bestScore);
+        currentAction = best;
+        currentAction.Execute();
     }
 
-    void moveTo(int room) {
-        Debug.Log("Going to room " + room);
-        agent.SetDestination(roomWaypoints[room - 1].transform.position);
+    private List<Action> GetAvailableActions() {
+        List<Action> actions = new List<Action>();
+        foreach (int room in RoomMap.GetRoomConnections(currentRoom)) {
+            GameObject roomWaypoint = roomWaypoints[room - 1];
+            actions.Add(new MoveTo(roomWaypoint.transform.position, roomWaypoint.transform.parent.GetComponent<Room>(), this));
+        }
+        return actions;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (currentAction != null && currentAction.IsDone()) {
+            ChooseAction();
+        }
     }
 
     //place holder
-    public void setRoom(int room) {
+    public void SetRoom(int room) {
         if (room != currentRoom) {
             currentRoom = room;
-            chooseAction();
+            ChooseAction();
         }
     }
 }

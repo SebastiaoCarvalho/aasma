@@ -23,6 +23,8 @@ public class Agent : MonoBehaviour {
         /* agent.SetDestination(target); */
     }
 
-    
+    public void MoveTo(Vector3 target) {
+        agent.SetDestination(target);
+    }
 
 }
