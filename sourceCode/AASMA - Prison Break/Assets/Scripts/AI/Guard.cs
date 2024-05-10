@@ -11,7 +11,7 @@ class Guard : Agent {
         ChangeTrajectory();
     }
 
-    private void Update() {
+    void Update() {
         if (waypoints == null || waypoints.Count == 0)
             return;
         if (chasing)
@@ -35,12 +35,12 @@ class Guard : Agent {
         agent.SetDestination(target);
     }
 
-    private void OnTriggerStay(Collider other) {
+    public void DetectPrisoner(Collider other) {
         agent.SetDestination(other.transform.position);
         chasing = true;
     }
 
-    private void OnTriggerExit(Collider other) {
+    public void LosePrisoner(Collider other) {
         chasing = false;
         ChangeTrajectory();
     }

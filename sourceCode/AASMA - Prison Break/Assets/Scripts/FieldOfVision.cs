@@ -84,4 +84,16 @@ class FieldOfVision : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         Debug.LogFormat("{0} sees {1}", holder.name, other.name);
     }
+
+    private void OnTriggerStay(Collider other) {
+        if (gameObject.tag == "Guard") {
+            holder.GetComponent<Guard>().DetectPrisoner(other);
+        }
+    }
+
+    private void OnTriggerExit(Collider other) {
+        if (gameObject.tag == "Guard") {
+            holder.GetComponent<Guard>().LosePrisoner(other);
+        }
+    }
 }
