@@ -1,6 +1,6 @@
 using UnityEngine;
 
-class MoveTo : Action // Action used to move between rooms
+public class MoveTo : Action // Action used to move between rooms
 {
     private Vector3 target;
     private Prisoner agent;

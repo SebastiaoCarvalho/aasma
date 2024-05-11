@@ -1,4 +1,4 @@
-class Action
+public class Action
 {
     public virtual void Execute() { }
     public virtual bool IsDone() { return true; }

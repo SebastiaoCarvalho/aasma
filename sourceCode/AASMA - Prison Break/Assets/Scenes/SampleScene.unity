@@ -25089,7 +25089,6 @@ Transform:
   - {fileID: 473615439}
   - {fileID: 695423473}
   - {fileID: 1308656357}
-  - {fileID: 756596319}
   - {fileID: 1450398445}
   - {fileID: 688582589}
   - {fileID: 822042142}
@@ -28436,7 +28435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomNumber: 5
-  roomUtility: 6
+  roomUtility: 4
 --- !u!65 &688582591
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -31121,12 +31120,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 756596318}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 89.4, y: 0, z: -31.4}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 27.45, y: 0, z: -20.900002}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 629472256}
+  m_Father: {fileID: 1308656357}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &757991017
 GameObject:
@@ -54504,7 +54503,8 @@ Transform:
   m_LocalPosition: {x: 34.5, y: 0, z: 10.4}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 756596319}
   m_Father: {fileID: 629472256}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1308656358

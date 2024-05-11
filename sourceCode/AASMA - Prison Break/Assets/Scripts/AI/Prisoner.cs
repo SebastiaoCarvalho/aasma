@@ -8,8 +8,10 @@ public class Prisoner : Agent
     
     [SerializeField] List<GameObject> roomWaypoints = new List<GameObject>();
     private Action currentAction;
+    private Dictionary<Guard, int> guardInfo = new Dictionary<Guard, int>();
 
     int currentRoom = 2;
+    float cash = 100;
 
     new void Start()
     {
@@ -19,8 +21,11 @@ public class Prisoner : Agent
         ChooseAction();
     }
 
-    void ChooseAction() {
+    public void ChooseAction() {
         List<Action> actions = GetAvailableActions();
+        foreach (Guard guard in guardInfo.Keys) {
+            actions.Add(new Bribe(this, guard));
+        }
         Action best = null;
         float bestScore = Mathf.NegativeInfinity;
         foreach (Action action in actions) {
@@ -59,4 +64,26 @@ public class Prisoner : Agent
             ChooseAction();
         }
     }
+
+    public void Spend(float amount) {
+        cash -= amount;
+    }
+
+    public float ProposeBribe(float min, float max) {
+        return Random.Range(min, max);
+    }
+
+    public bool AcceptAmmount(float amount) {
+        return cash >= amount && Random.Range(0, 1) > 0.5; // TODO : fix this later
+    }
+
+    public void AddGuardInfo(Guard guard) {
+        Debug.Log("Adding guard info");
+        guardInfo[guard] = currentRoom;
+    }
+
+    public void RemoveGuardInfo(Guard guard) {
+        guardInfo.Remove(guard);
+    }
+
 }

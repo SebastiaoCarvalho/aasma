@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class Guard : Agent {
+public class Guard : Agent {
     [SerializeField] List<GameObject> waypoints = new List<GameObject>();
+    [SerializeField] float minAmountBribery = 0;
+    bool sleep = false;
     bool chasing = false;
     protected new void Start() {
         base.Start();
@@ -14,7 +16,7 @@ class Guard : Agent {
     void Update() {
         if (waypoints == null || waypoints.Count == 0)
             return;
-        if (chasing)
+        if (chasing || sleep)
             return;
         if (Vector3.Distance(transform.position, target) < 1) 
             ChangeTrajectory();
@@ -43,6 +45,23 @@ class Guard : Agent {
     public void LosePrisoner(Collider other) {
         chasing = false;
         ChangeTrajectory();
+    }
+
+    public float NegotiateBribe(int negotiationStep, float proposalAmount) {
+        float rejectionProb = negotiationStep * Random.Range(0, 0.5f) + Random.Range(0, 0.2f);
+        if (rejectionProb > 1) return -1;
+        return proposalAmount; // TODO : learn more about negotiation to improve this
+    }
+
+    public void ArrestPrisoner(Prisoner prisoner) {
+        prisoner.gameObject.SetActive(false); // TODO : lead prisoner to cell
+        return ;
+    }
+
+    public void Sleep() {
+        transform.GetChild(0).gameObject.SetActive(false); // deactivate FOV
+        agent.isStopped = true;
+        sleep = true;
     }
 
 }
