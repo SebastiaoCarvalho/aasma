@@ -12,6 +12,7 @@ public class Prisoner : Agent
 
     int currentRoom = 2;
     float cash = 100;
+    bool escaped = false;
 
     new void Start()
     {
@@ -52,6 +53,8 @@ public class Prisoner : Agent
     // Update is called once per frame
     void Update()
     {
+        if (escaped) return;
+
         if (currentAction != null && currentAction.IsDone()) {
             ChooseAction();
         }
@@ -61,6 +64,10 @@ public class Prisoner : Agent
     public void SetRoom(int room) {
         if (room != currentRoom) {
             currentRoom = room;
+            if (currentRoom == 18) {
+                escaped = true;
+                return;
+            }
             ChooseAction();
         }
     }
