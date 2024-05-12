@@ -11,8 +11,11 @@ public class Room : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         Prisoner prisoner = other.GetComponent<Prisoner>();
+        Guard guard = other.GetComponent<Guard>();
 
         if (prisoner != null)
             prisoner.SetRoom(roomNumber);
+        else if (guard != null)
+            guard.SetRoom(roomNumber);
     }
 }
