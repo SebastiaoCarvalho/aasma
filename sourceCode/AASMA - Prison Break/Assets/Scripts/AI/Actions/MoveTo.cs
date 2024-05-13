@@ -25,6 +25,8 @@ public class MoveTo : Action // Action used to move between rooms
 
     public override float Utility()
     {
+        if (agent.GuardInRoom(room.roomNumber))
+            return -10;
         return room.Utility;
     }
 

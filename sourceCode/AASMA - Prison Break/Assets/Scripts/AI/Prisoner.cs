@@ -72,6 +72,10 @@ public class Prisoner : Agent
         }
     }
 
+    public bool GuardInRoom(int room) {
+        return guardInfo.ContainsValue(room);
+    }
+
     public void Spend(float amount) {
         cash -= amount;
     }

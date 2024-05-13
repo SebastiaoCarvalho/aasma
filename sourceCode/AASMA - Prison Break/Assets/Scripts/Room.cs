@@ -18,4 +18,5 @@ public class Room : MonoBehaviour
         else if (guard != null)
             guard.SetRoom(roomNumber);
     }
+    
 }
