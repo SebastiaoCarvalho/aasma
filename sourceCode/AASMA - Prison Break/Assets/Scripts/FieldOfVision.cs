@@ -83,7 +83,6 @@ class FieldOfVision : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         Debug.LogFormat("{0} detected {1}", holder, other);
-        Debug.Log(gameObject.tag);
         if (holder.CompareTag("Prisoner")) {
             holder.GetComponent<Prisoner>().AddGuardInfo(other.GetComponent<Guard>());
             holder.GetComponent<Prisoner>().ChooseAction();

@@ -23,6 +23,7 @@ public class Guard : Agent {
     GameObject assisting = null;
     bool assisted = false;
     float timeWithoutSeeingPrisioner = 0.0F;
+    public float MinAmountBribery { get => minAmountBribery; }
 
     protected new void Start() {
         base.Start();
@@ -143,7 +144,7 @@ public class Guard : Agent {
     public float NegotiateBribe(int negotiationStep, float proposalAmount) {
         float rejectionProb = negotiationStep * UnityEngine.Random.Range(0, 0.5f) + UnityEngine.Random.Range(0, 0.2f);
         if (rejectionProb > 1) return -1;
-        return proposalAmount; // TODO : learn more about negotiation to improve this
+        return Math.Max(minAmountBribery, proposalAmount); // TODO : learn more about negotiation to improve this
     }
 
     public void ArrestPrisoner(Prisoner prisoner) {

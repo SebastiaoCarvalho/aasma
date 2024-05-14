@@ -13,14 +13,15 @@ public class Bribe : Action
 
     public override float Utility() // FIXME : what should the utility be?
     {
-        return -1;
+        //return 1 / (guard.MinAmountBribery + 1) * prisoner.Persuasion * 100;
+        return /* Random.Range(0f, 1f) * */ 10;
     }
 
     public override void Execute()
     {
         int step = 1;
-        float amount = 10;
-        float proposal = 0;
+        float amount = guard.MinAmountBribery;
+        float proposal = guard.MinAmountBribery * Random.Range(1f, 1.1f);
         while (amount != -1 && amount != proposal) {
             if (step > 1 && prisoner.AcceptAmmount(amount))
                 break;

@@ -16,6 +16,7 @@ public class MoveTo : Action // Action used to move between rooms
     public override void Execute()
     {
         agent.MoveTo(target);
+        agent.targetRoom = room.roomNumber;
     }
 
     public override bool IsDone()
