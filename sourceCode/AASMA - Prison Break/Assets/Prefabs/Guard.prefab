@@ -294,3 +294,6 @@ MonoBehaviour:
   speed: 3
   angularSpeed: 120
   waypoints: []
+  roomWaypoints: []
+  minAmountBribery: 0
+  alertedSpeed: 11

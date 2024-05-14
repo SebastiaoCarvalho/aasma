@@ -10,19 +10,25 @@ public class Prisoner : Agent
     private Action currentAction;
     private Dictionary<Guard, int> guardInfo = new Dictionary<Guard, int>();
 
+    public Vector3 startingPosition;
     int currentRoom = 2;
     float cash = 100;
     bool escaped = false;
+    bool arrested = false;
+
+    Guard guardPerformingTheArrest;
 
     new void Start()
     {
         base.Start();
+        startingPosition = transform.position;
         roomWaypoints = GameObject.FindGameObjectsWithTag("RoomWaypoint").OrderBy(waypoint => waypoint.name).ToList();
         Debug.Log(roomWaypoints);
         ChooseAction();
     }
 
     public void ChooseAction() {
+        if (arrested == true) return;
         List<Action> actions = GetAvailableActions();
         foreach (Guard guard in guardInfo.Keys) {
             actions.Add(new Bribe(this, guard));
@@ -56,6 +62,11 @@ public class Prisoner : Agent
         if (escaped) return;
 
         if (currentAction != null && currentAction.IsDone()) {
+            if (arrested == true) {
+                guardPerformingTheArrest.FinishArrest();
+                gameObject.SetActive(false);
+                return;
+            }
             ChooseAction();
         }
     }
@@ -68,7 +79,7 @@ public class Prisoner : Agent
                 escaped = true;
                 return;
             }
-            ChooseAction();
+            //ChooseAction();
         }
     }
 
@@ -95,6 +106,14 @@ public class Prisoner : Agent
 
     public void RemoveGuardInfo(Guard guard) {
         guardInfo.Remove(guard);
+    }
+
+    public void Arrested(Guard guard) {
+        Debug.Log("-----------------------------");
+        arrested = true;
+        guardPerformingTheArrest = guard;
+        currentAction = new MoveTo(startingPosition, roomWaypoints[1].transform.parent.GetComponent<Room>(), this);
+        currentAction.Execute();
     }
 
 }

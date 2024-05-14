@@ -13,7 +13,7 @@ public class Bribe : Action
 
     public override float Utility() // FIXME : what should the utility be?
     {
-        return 100;
+        return -1;
     }
 
     public override void Execute()

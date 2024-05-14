@@ -13,6 +13,9 @@ public class Guard : Agent {
     List <GameObject> otherGuards = new List<GameObject>();
     bool sleep = false;
     bool chasing = false;
+    bool arresting = false;
+
+    Prisoner prisonerBeingArrested;
     
     // coop variables
     int currentRoom = 2;
@@ -27,6 +30,7 @@ public class Guard : Agent {
             return;
         otherGuards = GameObject.FindGameObjectsWithTag("Guard").Where(gameObject => gameObject != this.gameObject).ToList();
         roomWaypoints = GameObject.FindGameObjectsWithTag("RoomWaypoint").OrderBy(waypoint => waypoint.name).ToList();
+        Debug.Log(roomWaypoints.Count());
         ChangeTrajectory();
     }
 
@@ -37,8 +41,13 @@ public class Guard : Agent {
 
         if (waypoints == null || waypoints.Count == 0)
             return;
-        if (chasing || sleep)
+        if (chasing || sleep) {
             return;
+        }
+        if (arresting) {
+            agent.SetDestination(prisonerBeingArrested.transform.position);
+            return;
+        }
         if (Vector3.Distance(transform.position, target) < 1) {
             if (alerted && timeWithoutSeeingPrisioner < 5.0f) { // if alerted
                 return;
@@ -67,6 +76,7 @@ public class Guard : Agent {
     }
 
     public void DetectPrisoner(Collider other) {
+        if (arresting == true) return;
         timeWithoutSeeingPrisioner = 0.0F;
         target = other.transform.position;
         agent.SetDestination(target);
@@ -128,7 +138,6 @@ public class Guard : Agent {
 
     public void LosePrisoner(Collider other) {
         chasing = false;
-        ChangeTrajectory();
     }
 
     public float NegotiateBribe(int negotiationStep, float proposalAmount) {
@@ -138,8 +147,17 @@ public class Guard : Agent {
     }
 
     public void ArrestPrisoner(Prisoner prisoner) {
-        prisoner.gameObject.SetActive(false); // TODO : lead prisoner to cell
-        return ;
+        Debug.Log("Come here!");
+        arresting = true;
+        chasing = false;
+        prisoner.Arrested(this);
+        prisonerBeingArrested = prisoner;
+        return;
+    }
+
+    public void FinishArrest() {
+        arresting = false;
+        ChangeTrajectory();
     }
 
     public void Sleep() {
@@ -190,4 +208,8 @@ public class Guard : Agent {
         currentRoom = room;
     }
 
+    public void OnTriggerEnter(Collider collider) {
+        if (alerted && !arresting && collider.GetComponent<Prisoner>() != null)
+            ArrestPrisoner(collider.GetComponent<Prisoner>());
+    }
 }
