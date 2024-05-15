@@ -90,13 +90,13 @@ class FieldOfVision : MonoBehaviour
     }
 
     private void OnTriggerStay(Collider other) {
-        if (holder.CompareTag("Guard")) {
+        if (holder.CompareTag("Guard") && !other.GetComponent<Prisoner>().arrested) {
             holder.GetComponent<Guard>().DetectPrisoner(other);
         }
     }
 
     private void OnTriggerExit(Collider other) {
-        if (gameObject.transform.parent.tag == "Guard") {
+        if (gameObject.transform.parent.tag == "Guard" && !other.GetComponent<Prisoner>().arrested) {
             holder.GetComponent<Guard>().LosePrisoner(other);
         }
     }

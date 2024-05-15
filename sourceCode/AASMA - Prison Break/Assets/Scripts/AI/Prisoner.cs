@@ -15,7 +15,7 @@ public class Prisoner : Agent
     public int targetRoom = 0;
     float cash = 100;
     bool escaped = false;
-    bool arrested = false;
+    public bool arrested = false;
 
     Guard guardPerformingTheArrest;
     float persuasion = 1;

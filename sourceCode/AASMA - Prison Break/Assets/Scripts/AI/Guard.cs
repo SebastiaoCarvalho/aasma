@@ -13,13 +13,13 @@ public class Guard : Agent {
     List <GameObject> otherGuards = new List<GameObject>();
     bool sleep = false;
     bool chasing = false;
-    bool arresting = false;
+    public bool arresting = false;
 
     Prisoner prisonerBeingArrested;
     
     // coop variables
     int currentRoom = 2;
-    bool alerted = false;
+    public bool alerted = false;
     GameObject assisting = null;
     bool assisted = false;
     float timeWithoutSeeingPrisioner = 0.0F;
@@ -49,7 +49,7 @@ public class Guard : Agent {
             agent.SetDestination(prisonerBeingArrested.transform.position);
             return;
         }
-        if (Vector3.Distance(transform.position, target) < 1) {
+        if (Vector3.Distance(transform.position, target) < 2) {
             if (alerted && timeWithoutSeeingPrisioner < 5.0f) { // if alerted
                 return;
             }
@@ -138,6 +138,7 @@ public class Guard : Agent {
     }
 
     public void LosePrisoner(Collider other) {
+        Debug.Log("Lost");
         chasing = false;
     }
 
@@ -207,10 +208,5 @@ public class Guard : Agent {
 
     public void SetRoom(int room) {
         currentRoom = room;
-    }
-
-    public void OnTriggerEnter(Collider collider) {
-        if (alerted && !arresting && collider.GetComponent<Prisoner>() != null)
-            ArrestPrisoner(collider.GetComponent<Prisoner>());
     }
 }
