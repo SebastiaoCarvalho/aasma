@@ -10,6 +10,7 @@ public class Guard : Agent {
     [SerializeField] List<GameObject> waypoints = new List<GameObject>();
     [SerializeField] List<GameObject> roomWaypoints = new List<GameObject>();
     [SerializeField] float minAmountBribery = 0;
+    [SerializeField] float desiredAmountBribery = 0;
     [SerializeField] private float alertedSpeed = 11f;
     List <GameObject> otherGuards = new List<GameObject>();
     bool sleep = false;
@@ -31,9 +32,27 @@ public class Guard : Agent {
         base.Start();
         if (waypoints == null || waypoints.Count == 0)
             return;
+        startingPosition = transform.position;
         otherGuards = GameObject.FindGameObjectsWithTag("Guard").Where(gameObject => gameObject != this.gameObject).ToList();
         roomWaypoints = GameObject.FindGameObjectsWithTag("RoomWaypoint").OrderBy(waypoint => waypoint.name).ToList();
         Debug.Log(roomWaypoints.Count());
+        Reset();
+    }
+
+    public override void Reset()
+    {
+        sleep = false;
+        chasing = false;
+        arresting = false;
+        prisonerBeingArrested = null;
+        currentRoom = 2;
+        alerted = false;
+        assisting = null;
+        assisted = false;
+        timeWithoutSeeingPrisioner = 0.0F;
+        transform.GetChild(0).gameObject.SetActive(true);
+        agent.isStopped = true;
+        agent.Warp(startingPosition);
         ChangeTrajectory();
     }
 
@@ -145,9 +164,13 @@ public class Guard : Agent {
     }
 
     public float NegotiateBribe(int negotiationStep, float proposalAmount) {
+        // Guard has a probability of rejecting the bribe, which increases with the negotiation step (time)
         float rejectionProb = negotiationStep * UnityEngine.Random.Range(0, 0.5f) + UnityEngine.Random.Range(0, 0.2f);
         if (rejectionProb > 1) return -1;
-        return Math.Max(minAmountBribery, proposalAmount); // TODO : learn more about negotiation to improve this
+
+        // Guard always counters offer with the minimum amount he is willing to accept, since prisoners value
+        // their freedom more than money
+        return Math.Max(minAmountBribery, proposalAmount); 
     }
 
     public void ArrestPrisoner(Prisoner prisoner) {

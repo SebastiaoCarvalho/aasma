@@ -9,31 +9,41 @@ public class Prisoner : Agent
     [SerializeField] List<GameObject> roomWaypoints = new List<GameObject>();
     private Action currentAction;
     private Dictionary<Guard, int> guardInfo = new Dictionary<Guard, int>();
-
-    public Vector3 startingPosition;
     int currentRoom = 2;
     public int targetRoom = 0;
     [SerializeField] float cash = 100;
     bool escaped = false;
     public bool arrested = false;
-
     Guard guardPerformingTheArrest;
-    float persuasion = 1;
-    public float Persuasion { get => persuasion; }
 
     new void Start()
     {
         base.Start();
         startingPosition = transform.position;
         roomWaypoints = GameObject.FindGameObjectsWithTag("RoomWaypoint").OrderBy(waypoint => waypoint.name).ToList();
+        Reset();
+    }
+
+    public override void Reset()
+    {
+        currentAction = null;
+        guardInfo.Clear();
+        currentRoom = 2;
+        targetRoom = 0;
+        cash = 100;
+        escaped = false;
+        arrested = false;
+        gameObject.SetActive(true);
+        agent.Warp(startingPosition);
         ChooseAction();
     }
 
     public void ChooseAction() {
-        if (arrested == true) return;
+        if (arrested) return;
         List<Action> actions = GetAvailableActions();
         foreach (Guard guard in guardInfo.Keys.ToList().Where(guard => guardInfo[guard] == currentRoom)) {
-            actions.Add(new Bribe(this, guard));
+            Room room = roomWaypoints[guardInfo[guard] - 1].transform.parent.GetComponent<Room>();
+            actions.Add(new Bribe(this, guard, room));
         }
         Action best = null;
         float bestScore = Mathf.NegativeInfinity;
@@ -68,9 +78,10 @@ public class Prisoner : Agent
         if (escaped) return;
 
         if (currentAction != null && currentAction.IsDone()) {
-            if (arrested == true) {
+            if (arrested) {
                 guardPerformingTheArrest.FinishArrest();
                 gameObject.SetActive(false);
+                GameManager.Instance.PrisonerArrested();
                 return;
             }
             ChooseAction();
@@ -97,6 +108,9 @@ public class Prisoner : Agent
         return guardInfo.Count > 0;
     }
 
+    public bool HasEnoughCash(float amount) {
+        return cash >= amount;
+    }
     public void Spend(float amount) {
         cash -= amount;
     }
@@ -117,10 +131,6 @@ public class Prisoner : Agent
             this
         );
         currentAction.Execute();
-    }
-
-    public bool AcceptAmmount(float amount) {
-        return cash >= amount && Random.Range(0, 1) > 0.5; // TODO : fix this later
     }
 
     public void AddGuardInfo(Guard guard) {

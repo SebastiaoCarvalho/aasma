@@ -7,9 +7,10 @@ using UnityEngine.AI;
 using TMPro;
 using System;
 
-public class Agent : MonoBehaviour {
+public abstract class Agent : MonoBehaviour {
 
     protected Vector3 target;
+    public Vector3 startingPosition;
     protected NavMeshAgent agent;
 
     public GameObject text;
@@ -26,6 +27,8 @@ public class Agent : MonoBehaviour {
         agent.angularSpeed = angularSpeed;
         /* agent.SetDestination(target); */
     }
+
+    public abstract void Reset();
 
     public void MoveTo(Vector3 target) {
         agent.SetDestination(target);

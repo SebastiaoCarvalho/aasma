@@ -5,32 +5,40 @@ public class Bribe : Action
 
     private Guard guard;
     private Prisoner prisoner;
+    private Room currentRoom;
 
-    public Bribe(Prisoner prisoner, Guard guard) {
+    public Bribe(Prisoner prisoner, Guard guard, Room currentRoom) {
         this.prisoner = prisoner;
         this.guard = guard;
+        this.currentRoom = currentRoom;
     }
 
     public override float Utility() // FIXME : what should the utility be?
     {
-        //return 1 / (guard.MinAmountBribery + 1) * prisoner.Persuasion * 100;
-        return /* Random.Range(0f, 1f) * */ 10 * (guard.prisonersToIgnore.Contains(prisoner) ? 0.0F : 1.0F); // add * prisioner to ignore
+        float escapeVal = 1 - (currentRoom.Utility / 10);
+        float bribeVal = guard.MinAmountBribery / 100;
+
+        if (guard.prisonersToIgnore.Contains(prisoner)) return 0; // add * prisioner to ignore
+        return (bribeVal * 1.3f - escapeVal * .5f) * 10;
     }
 
     public override void Execute()
     {
         int step = 1;
-        float amount = guard.MinAmountBribery;
-        float proposal = guard.MinAmountBribery * Random.Range(1f, 1.1f);
-        while (amount != -1 && amount != proposal) {
-            if (step > 1 && prisoner.AcceptAmmount(amount))
-                break;
+        float amount = guard.MinAmountBribery * Random.Range(1f, 1.1f);
+        float proposal = guard.MinAmountBribery;
+
+        // prisoner proposes amount and guard counters
+        // if guard countes with -1, prisoner is arrested
+        // if guard counters with same amount, prisoner pays and guard sleeps
+
+        while (amount != -1 && amount != proposal) { 
             proposal = prisoner.ProposeBribe(proposal, amount);
             amount = guard.NegotiateBribe(step, proposal);
             Debug.LogFormat("Prisoner proposed {0}, guard countered with {1}", proposal, amount);
             step++;
         }
-        if (amount < 0) {
+        if (amount < 0 || ! prisoner.HasEnoughCash(amount)) {
             guard.ArrestPrisoner(prisoner);
         }
         else {
@@ -38,6 +46,7 @@ public class Bribe : Action
             guard.Ignore(prisoner);
             prisoner.RemoveGuardInfo(guard);
             prisoner.PopUp("Bribe");
+            GameManager.Instance.AddBriberyAmount(amount);
         }
     }
 
