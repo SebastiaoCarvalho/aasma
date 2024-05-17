@@ -15,6 +15,7 @@ public class Guard : Agent {
     bool chasing = false;
     public bool arresting = false;
 
+    List<Prisoner> prisonersToIgnore = new List<Prisoner>();
     Prisoner prisonerBeingArrested;
     
     // coop variables
@@ -77,7 +78,7 @@ public class Guard : Agent {
     }
 
     public void DetectPrisoner(Collider other) {
-        if (arresting == true) return;
+        if (arresting == true || prisonersToIgnore.Contains(other.GetComponent<Prisoner>())) return;
         timeWithoutSeeingPrisioner = 0.0F;
         target = other.transform.position;
         agent.SetDestination(target);
@@ -166,6 +167,10 @@ public class Guard : Agent {
         transform.GetChild(0).gameObject.SetActive(false); // deactivate FOV
         agent.isStopped = true;
         sleep = true;
+    }
+
+    public void Ignore(Prisoner prisoner) {
+        prisonersToIgnore.Add(prisoner);
     }
 
     /*

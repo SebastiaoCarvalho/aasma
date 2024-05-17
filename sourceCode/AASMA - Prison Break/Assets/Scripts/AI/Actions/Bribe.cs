@@ -35,7 +35,7 @@ public class Bribe : Action
         }
         else {
             prisoner.Spend(amount);
-            guard.Sleep();
+            guard.Ignore(prisoner);
             prisoner.RemoveGuardInfo(guard);
         }
     }
