@@ -4,11 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using TMPro;
+using System;
 
 public class Agent : MonoBehaviour {
 
     protected Vector3 target;
     protected NavMeshAgent agent;
+
+    public GameObject text;
 
     [Header("Agent Settings")]
     [SerializeField] private float speed = 10f;
@@ -27,4 +31,10 @@ public class Agent : MonoBehaviour {
         agent.SetDestination(target);
     }
 
+    public void PopUp(String message) {
+        text.transform.position = new Vector3(this.transform.position.x, 4, this.transform.position.z);
+        text.GetComponent<TextMeshPro>().text = message;
+        var animation = Instantiate(text);
+        Destroy(animation, 1.5f);
+    }
 }

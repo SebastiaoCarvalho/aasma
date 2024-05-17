@@ -37,6 +37,7 @@ public class Bribe : Action
             prisoner.Spend(amount);
             guard.Ignore(prisoner);
             prisoner.RemoveGuardInfo(guard);
+            prisoner.PopUp("Bribe");
         }
     }
 

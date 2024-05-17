@@ -291,6 +291,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3825bc29772b95b4d9945886b4968313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 3076174315969713336, guid: 4251a3c7232bd5f48807c41ea7518fc0, type: 3}
   speed: 10
   angularSpeed: 120
   roomWaypoints: []
+  startingPosition: {x: 0, y: 0, z: 0}
+  targetRoom: 0
+  arrested: 0

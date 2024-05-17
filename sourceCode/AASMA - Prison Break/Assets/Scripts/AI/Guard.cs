@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using TMPro;
 
 public class Guard : Agent {
     [SerializeField] List<GameObject> waypoints = new List<GameObject>();
@@ -150,7 +151,7 @@ public class Guard : Agent {
     }
 
     public void ArrestPrisoner(Prisoner prisoner) {
-        Debug.Log("Come here!");
+        PopUp("Arrest");
         arresting = true;
         chasing = false;
         prisoner.Arrested(this);
