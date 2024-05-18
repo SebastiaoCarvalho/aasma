@@ -129,8 +129,8 @@ public class Prisoner : Agent
         cash += amount;
     }
 
-    public float ProposeBribe(float min, float max) {
-        return Random.Range(min, max);
+    public float ProposeBribe(float min, float max) { // always return max since Prisoner value more the freedom than the money
+        return max;
     }
 
     public void Incite(Prisoner prisoner, float amount, Guard guard) {

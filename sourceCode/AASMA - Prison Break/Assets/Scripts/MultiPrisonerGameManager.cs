@@ -10,8 +10,8 @@ public class MultiPrisonerGameManager : GameManager {
 
     private new void Start() {
         base.Start();
-        timesNumberOfEscaped = new List<int>(prisoners.Count + 1); // acount for 0 escapees
-        for (int i = 0; i < prisoners.Count; i++) {
+        timesNumberOfEscaped = new List<int>(); // acount for 0 escapee
+        for (int i = 0; i < prisoners.Count + 1; i++) {
             timesNumberOfEscaped.Add(0);
         }
         remainingPrisoners = new List<Prisoner>(prisoners);
@@ -32,7 +32,9 @@ public class MultiPrisonerGameManager : GameManager {
     }
 
     public override void PrisonerEscaped(Prisoner prisoner) {
+        Debug.LogFormat("Previous prisoners: {0}", remainingPrisoners.Count);
         remainingPrisoners.Remove(prisoner);
+        Debug.LogFormat("Remaining prisoners: {0}", remainingPrisoners.Count);
         prisonersPerRound++;
         if (remainingPrisoners.Count == 0) {
             runs++;
@@ -41,6 +43,8 @@ public class MultiPrisonerGameManager : GameManager {
     }
 
     protected override void ResetGame() {
+        Debug.Log("Prisoners escaped: " + prisonersPerRound);
+        Debug.Log(timesNumberOfEscaped.Count);
         timesNumberOfEscaped[prisonersPerRound]++;
         prisonersPerRound = 0;
         base.ResetGame();
