@@ -35,9 +35,9 @@ public abstract class Agent : MonoBehaviour {
     }
 
     public void PopUp(String message) {
-        text.transform.position = new Vector3(this.transform.position.x, 4, this.transform.position.z);
-        text.GetComponent<TextMeshPro>().text = message;
         var animation = Instantiate(text);
+        animation.transform.position = new Vector3(this.transform.position.x, 4, this.transform.position.z);
+        animation.GetComponent<TextMeshPro>().text = message;
         Destroy(animation, 1.5f);
     }
 }
