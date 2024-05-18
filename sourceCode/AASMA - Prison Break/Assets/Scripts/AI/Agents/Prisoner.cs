@@ -139,6 +139,7 @@ public class Prisoner : Agent
         int guardRoom = guardInfo.Values.Last();
         prisoner.ForceMove(guardRoom);
         RemovePrisonerInfo(prisoner);
+        PopUp("Incite");
     }
 
     public void ForceMove(int room) {
