@@ -7,15 +7,14 @@ public class GameManager : MonoBehaviour {
 
     // Statistics
     int prisonerWins = 0;
-    float averageBriberyAmount = 0;
+    protected float averageBriberyAmount = 0;
     int briberyTimes = 0;
-    int runs = 0;
+    protected int runs = 0;
 
-    // TODO : add stats for multiple prisoners
 
     // Prisoners and Guards to respawn
-    List<Prisoner> prisoners = new List<Prisoner>();
-    List<Guard> guards = new List<Guard>();
+    protected List<Prisoner> prisoners = new List<Prisoner>();
+    protected List<Guard> guards = new List<Guard>();
 
     private static GameManager instance = null;
     public static GameManager Instance { get => instance; }
@@ -23,27 +22,28 @@ public class GameManager : MonoBehaviour {
     private void Awake() {
         if (instance == null) {
             instance = this;
+            Debug.Log("GameManager instance created");
         }
     }
 
-    private void Start() {
+    protected void Start() {
         prisoners = new List<Prisoner>(FindObjectsOfType<Prisoner>());
         guards = new List<Guard>(FindObjectsOfType<Guard>());
     }
 
-    public void PrisonerEscaped() {
+    virtual public void PrisonerEscaped(Prisoner prisoner) {
         prisonerWins++;
         runs++;
         ResetGame();
     }
 
     public void AddBriberyAmount(float amount) {
-        averageBriberyAmount += amount;
+        averageBriberyAmount = averageBriberyAmount * briberyTimes + amount;
         briberyTimes++;
         averageBriberyAmount /= briberyTimes;
     }
 
-    private void ResetGame() {
+    virtual protected void ResetGame() {
         if (runs == ENDRUNS) {
             PrintStats();
             UnityEditor.EditorApplication.isPlaying = false; // Stop the game
@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour {
         guards.ForEach(guard => guard.Reset());
     }
 
-    public void PrisonerArrested() {
+    virtual public void PrisonerArrested(Prisoner prisoner) {
         runs++;
         ResetGame();
     }
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour {
         PrintStats();
     }
 
-    private void PrintStats() {
+    protected virtual void PrintStats() {
         Debug.LogFormat("Total simulations: {0}", runs);
         Debug.LogFormat("Prisoner wins: {0}", prisonerWins);
         Debug.LogFormat("Average bribery amount: {0}", averageBriberyAmount);

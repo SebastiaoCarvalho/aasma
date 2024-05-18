@@ -84,7 +84,12 @@ class FieldOfVision : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         Debug.LogFormat("{0} detected {1}", holder, other);
         if (holder.CompareTag("Prisoner")) {
-            holder.GetComponent<Prisoner>().AddGuardInfo(other.GetComponent<Guard>());
+            if (other.CompareTag("Guard")) {
+                holder.GetComponent<Prisoner>().AddGuardInfo(other.GetComponent<Guard>());
+            }
+            else if (other.CompareTag("Prisoner")) {
+                holder.GetComponent<Prisoner>().AddPrisonerInfo(other.GetComponent<Prisoner>());
+            }
             holder.GetComponent<Prisoner>().ChooseAction();
         }
     }
@@ -98,6 +103,11 @@ class FieldOfVision : MonoBehaviour
     private void OnTriggerExit(Collider other) {
         if (gameObject.transform.parent.tag == "Guard" && !other.GetComponent<Prisoner>().arrested) {
             holder.GetComponent<Guard>().LosePrisoner(other);
+        }
+        else if (gameObject.transform.parent.tag == "Prisoner") {
+            if (other.CompareTag("Prisoner")) {
+                holder.GetComponent<Prisoner>().RemovePrisonerInfo(other.GetComponent<Prisoner>());
+            }
         }
     }
 }

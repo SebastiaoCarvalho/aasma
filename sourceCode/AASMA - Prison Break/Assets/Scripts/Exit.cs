@@ -6,7 +6,8 @@ public class Exit : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Prisoner")) {
-            GameManager.Instance.PrisonerEscaped();
+            Debug.Log("Prisoner escaped!");
+            GameManager.Instance.PrisonerEscaped(other.GetComponent<Prisoner>());
         }
     }
 }

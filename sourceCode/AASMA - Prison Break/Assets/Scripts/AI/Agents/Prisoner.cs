@@ -9,6 +9,7 @@ public class Prisoner : Agent
     [SerializeField] List<GameObject> roomWaypoints = new List<GameObject>();
     private Action currentAction;
     private Dictionary<Guard, int> guardInfo = new Dictionary<Guard, int>();
+    private Prisoner lastSeen;
     int currentRoom = 2;
     public int targetRoom = 0;
     [SerializeField] float cash = 100;
@@ -44,6 +45,9 @@ public class Prisoner : Agent
         foreach (Guard guard in guardInfo.Keys.ToList().Where(guard => guardInfo[guard] == currentRoom)) {
             Room room = roomWaypoints[guardInfo[guard] - 1].transform.parent.GetComponent<Room>();
             actions.Add(new Bribe(this, guard, room));
+        }
+        if (lastSeen != null) {
+            actions.Add(new Incite(this, lastSeen, guardInfo.Last().Key));
         }
         Action best = null;
         float bestScore = Mathf.NegativeInfinity;
@@ -81,11 +85,17 @@ public class Prisoner : Agent
             if (arrested) {
                 guardPerformingTheArrest.FinishArrest();
                 gameObject.SetActive(false);
-                GameManager.Instance.PrisonerArrested();
+                GameManager.Instance.PrisonerArrested(this);
                 return;
             }
             ChooseAction();
         }
+    }
+
+    public float Utility() {
+        if (escaped) return 100;
+        if (arrested) return -100;
+        return currentAction.Utility();
     }
 
     //place holder
@@ -115,13 +125,20 @@ public class Prisoner : Agent
         cash -= amount;
     }
 
+    public void ReceiveCash(float amount) {
+        cash += amount;
+    }
+
     public float ProposeBribe(float min, float max) {
         return Random.Range(min, max);
     }
 
-    public void Incite(Prisoner prisoner) {
+    public void Incite(Prisoner prisoner, float amount, Guard guard) {
+        Spend(amount);
+        prisoner.ReceiveCash(amount);
         int guardRoom = guardInfo.Values.Last();
         prisoner.ForceMove(guardRoom);
+        RemovePrisonerInfo(prisoner);
     }
 
     public void ForceMove(int room) {
@@ -140,6 +157,18 @@ public class Prisoner : Agent
 
     public void RemoveGuardInfo(Guard guard) {
         guardInfo.Remove(guard);
+    }
+
+    public bool KnowsGuard(Guard guard) {
+        return guardInfo.ContainsKey(guard);
+    }
+
+    public void AddPrisonerInfo(Prisoner prisoner) {
+        lastSeen = prisoner;
+    }
+
+    public void RemovePrisonerInfo(Prisoner prisoner) {
+        lastSeen = null;
     }
 
     public void Arrested(Guard guard) {

@@ -25,7 +25,7 @@ public class Bribe : Action
     public override void Execute()
     {
         int step = 1;
-        float amount = guard.MinAmountBribery * Random.Range(1f, 1.1f);
+        float amount = guard.MinAmountBribery * Random.Range(1f, 1.1f); // FIXME : this causes it to be only 1 step max, change to other value
         float proposal = guard.MinAmountBribery;
 
         // prisoner proposes amount and guard counters
