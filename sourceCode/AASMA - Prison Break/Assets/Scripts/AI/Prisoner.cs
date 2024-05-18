@@ -13,7 +13,7 @@ public class Prisoner : Agent
     public Vector3 startingPosition;
     int currentRoom = 2;
     public int targetRoom = 0;
-    float cash = 100;
+    [SerializeField] float cash = 100;
     bool escaped = false;
     public bool arrested = false;
 

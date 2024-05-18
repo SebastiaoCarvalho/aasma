@@ -14,7 +14,7 @@ public class Bribe : Action
     public override float Utility() // FIXME : what should the utility be?
     {
         //return 1 / (guard.MinAmountBribery + 1) * prisoner.Persuasion * 100;
-        return /* Random.Range(0f, 1f) * */ 10;
+        return /* Random.Range(0f, 1f) * */ 10 * (guard.prisonersToIgnore.Contains(prisoner) ? 0.0F : 1.0F); // add * prisioner to ignore
     }
 
     public override void Execute()

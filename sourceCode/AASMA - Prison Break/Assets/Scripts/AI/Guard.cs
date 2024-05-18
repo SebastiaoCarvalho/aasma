@@ -16,7 +16,7 @@ public class Guard : Agent {
     bool chasing = false;
     public bool arresting = false;
 
-    List<Prisoner> prisonersToIgnore = new List<Prisoner>();
+    public List<Prisoner> prisonersToIgnore = new List<Prisoner>();
     Prisoner prisonerBeingArrested;
     
     // coop variables
