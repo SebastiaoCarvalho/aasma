@@ -1,4 +1,5 @@
 using UnityEngine;
+using System; 
 
 public class Bribe : Action
 {
@@ -15,6 +16,15 @@ public class Bribe : Action
 
     public override float Utility() // FIXME : what should the utility be?
     {
+        /*
+        double escapeVal = currentRoom.Utility;
+        float bribeVal = (prisoner.cash - guard.MinAmountBribery) / 100.0f;
+
+        Debug.LogFormat("Bribe utility: {0}", (float) Math.Pow(1.4, escapeVal) + bribeVal);
+        if (guard.prisonersToIgnore.Contains(prisoner)) return 0; // add * prisioner to ignore
+        return (float) Math.Pow(1.4, escapeVal) + bribeVal;
+        */
+        
         float escapeVal = currentRoom.Utility / 10;
         float bribeVal = (100 - guard.MinAmountBribery) / 100;
 
@@ -27,7 +37,7 @@ public class Bribe : Action
     {
         int step = 1;
         float briberyStartAmount = 10;
-        float amount =  briberyStartAmount * Random.Range(1f, 1.1f);
+        float amount =  briberyStartAmount * UnityEngine.Random.Range(1f, 1.1f);
         float proposal = briberyStartAmount;
 
         // prisoner proposes amount and guard counters

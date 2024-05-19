@@ -12,7 +12,7 @@ public class Prisoner : Agent
     private Prisoner lastSeen;
     int currentRoom = 2;
     public int targetRoom = 0;
-    [SerializeField] float cash = 100;
+    [SerializeField] public float cash = 100;
     bool escaped = false;
     public bool arrested = false;
     Guard guardPerformingTheArrest;
