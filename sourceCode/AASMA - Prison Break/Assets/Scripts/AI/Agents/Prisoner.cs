@@ -42,11 +42,12 @@ public class Prisoner : Agent
     public void ChooseAction() {
         if (arrested) return;
         List<Action> actions = GetAvailableActions();
-        foreach (Guard guard in guardInfo.Keys.ToList().Where(guard => guardInfo[guard] == targetRoom)) {
-            Room room = roomWaypoints[guardInfo[guard] - 1].transform.parent.GetComponent<Room>();
-            actions.Add(new Bribe(this, guard, room));
-        }
-        if (lastSeen != null) {
+        if (GameManager.Instance.canBribe)
+            foreach (Guard guard in guardInfo.Keys.ToList().Where(guard => guardInfo[guard] == targetRoom)) {
+                Room room = roomWaypoints[guardInfo[guard] - 1].transform.parent.GetComponent<Room>();
+                actions.Add(new Bribe(this, guard, room));
+            }
+        if (lastSeen != null && GameManager.Instance.canIncite && guardInfo.Count > 0) {
             actions.Add(new Incite(this, lastSeen, guardInfo.Last().Key));
         }
         Action best = null;
