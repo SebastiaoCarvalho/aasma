@@ -51,7 +51,7 @@ public class Guard : Agent {
         assisted = false;
         timeWithoutSeeingPrisioner = 0.0F;
         transform.GetChild(0).gameObject.SetActive(true);
-        agent.isStopped = true;
+        agent.isStopped = false;
         agent.Warp(startingPosition);
         ChangeTrajectory();
     }
@@ -71,7 +71,7 @@ public class Guard : Agent {
             return;
         }
         if (Vector3.Distance(transform.position, target) < 2) {
-            if (alerted && timeWithoutSeeingPrisioner < 5.0f) { // if alerted
+            if (alerted && timeWithoutSeeingPrisioner < 3.0f) { // if alerted
                 return;
             }
             else if (assisting != null) {

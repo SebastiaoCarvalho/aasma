@@ -3,11 +3,16 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-    const int ENDRUNS = 30;
+    const int ENDRUNS = 100;
+
+    public bool canBribe = true;
+    public bool canIncite = true;
 
     // Statistics
     int prisonerWins = 0;
     protected float averageBriberyAmount = 0;
+    private float averageTimeToEscape = 0;
+    private float currentTimeToEscape = 0;
     int briberyTimes = 0;
     protected int runs = 0;
 
@@ -31,9 +36,15 @@ public class GameManager : MonoBehaviour {
         guards = new List<Guard>(FindObjectsOfType<Guard>());
     }
 
+    protected void Update() {
+        currentTimeToEscape += Time.deltaTime;
+    }
+
     virtual public void PrisonerEscaped(Prisoner prisoner) {
         prisonerWins++;
         runs++;
+        averageTimeToEscape = averageTimeToEscape * (runs - 1) + currentTimeToEscape;
+        averageTimeToEscape /= runs;
         ResetGame();
     }
 
@@ -50,6 +61,7 @@ public class GameManager : MonoBehaviour {
         }
         prisoners.ForEach(prisoner => prisoner.Reset());
         guards.ForEach(guard => guard.Reset());
+        currentTimeToEscape = 0;
     }
 
     virtual public void PrisonerArrested(Prisoner prisoner) {
@@ -64,7 +76,8 @@ public class GameManager : MonoBehaviour {
     protected virtual void PrintStats() {
         Debug.LogFormat("Total simulations: {0}", runs);
         Debug.LogFormat("Prisoner wins: {0}", prisonerWins);
-        Debug.LogFormat("Average bribery amount: {0}", averageBriberyAmount);
+        Debug.LogFormat("Average time to escape: {0}", averageTimeToEscape);
+        if (canBribe) Debug.LogFormat("Average bribery amount: {0}", averageBriberyAmount);
     }
 
 }
