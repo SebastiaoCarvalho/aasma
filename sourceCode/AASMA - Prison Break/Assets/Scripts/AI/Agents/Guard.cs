@@ -47,20 +47,19 @@ public class Guard : Agent {
         prisonerBeingArrested = null;
         currentRoom = 2;
         alerted = false;
+        agent.speed = speed;
         assisting = null;
         assisted = false;
         timeWithoutSeeingPrisioner = 0.0F;
+        prisonersToIgnore.Clear();
         transform.GetChild(0).gameObject.SetActive(true);
-        agent.isStopped = true;
+        agent.isStopped = false;
         agent.Warp(startingPosition);
+        agent.velocity = Vector3.zero;
         ChangeTrajectory();
     }
 
     void Update() {
-        if (alerted) { // if alerted
-            timeWithoutSeeingPrisioner += Time.deltaTime;
-        }
-
         if (waypoints == null || waypoints.Count == 0)
             return;
         if (chasing || sleep) {
@@ -70,11 +69,12 @@ public class Guard : Agent {
             agent.SetDestination(prisonerBeingArrested.transform.position);
             return;
         }
-        if (Vector3.Distance(transform.position, target) < 2) {
-            if (alerted && timeWithoutSeeingPrisioner < 5.0f) { // if alerted
-                return;
-            }
-            else if (assisting != null) {
+        if (Vector3.Distance(transform.position, target) < 1.5) {
+            if (assisting != null) {
+                timeWithoutSeeingPrisioner += Time.deltaTime;
+                if (timeWithoutSeeingPrisioner < 0.5f) {
+                    return;
+                }
                 assisting.GetComponent<Guard>().EndAssistance();
                 assisting = null;
             }
@@ -86,7 +86,7 @@ public class Guard : Agent {
         float dist = Mathf.Infinity;
         Vector3 closest = Vector3.zero;
         foreach (GameObject waypoint in waypoints) {
-            if ((transform.position - waypoint.transform.position).magnitude < 1) continue;
+            if ((transform.position - waypoint.transform.position).magnitude < 1.5) continue;
             float d = Vector3.Distance(transform.position, waypoint.transform.position);
             if (d < dist) {
                 dist = d;

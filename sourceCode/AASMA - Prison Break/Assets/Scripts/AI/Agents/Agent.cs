@@ -16,7 +16,7 @@ public abstract class Agent : MonoBehaviour {
     public GameObject text;
 
     [Header("Agent Settings")]
-    [SerializeField] private float speed = 10f;
+    [SerializeField] protected float speed = 10f;
     [SerializeField] private float angularSpeed = 120f;
 
     protected void Start() {

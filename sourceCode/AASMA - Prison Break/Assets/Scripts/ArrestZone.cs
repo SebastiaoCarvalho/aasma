@@ -11,7 +11,7 @@ public class ArrestZone : MonoBehaviour
     }
 
     public void OnTriggerEnter(Collider collider) {
-        if (holder.alerted && !holder.arresting && collider.GetComponent<Prisoner>() != null && !collider.GetComponent<Prisoner>().arrested) {
+        if (holder.alerted && !holder.arresting && collider.GetComponent<Prisoner>() != null && !collider.GetComponent<Prisoner>().arrested && !holder.prisonersToIgnore.Contains(collider.GetComponent<Prisoner>())) {
             holder.ArrestPrisoner(collider.GetComponent<Prisoner>());
             Debug.Log("help");
         }
