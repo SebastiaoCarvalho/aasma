@@ -14,7 +14,7 @@ public class Bribe : Action
         this.currentRoom = currentRoom;
     }
 
-    public override float Utility() // FIXME : what should the utility be?
+    public override float Utility()
     {
         /*
         double escapeVal = currentRoom.Utility;
@@ -28,13 +28,12 @@ public class Bribe : Action
         float escapeVal = currentRoom.Utility / 10;
         float bribeVal = (100 - guard.MinAmountBribery) / 100;
 
-        Debug.LogFormat("Bribe utility: {0}", (bribeVal * 1.3f - escapeVal * .5f) * 10);
-        if (guard.prisonersToIgnore.Contains(prisoner)) return 0; // add * prisioner to ignore
         return (bribeVal * 1.3f - escapeVal * .5f) * 10;
     }
 
     public override void Execute()
     {
+        Debug.Log("Attempting to bribe guard");
         int step = 1;
         float briberyStartAmount = 10;
         float amount =  briberyStartAmount * UnityEngine.Random.Range(1f, 1.1f);

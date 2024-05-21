@@ -35,7 +35,6 @@ public class Guard : Agent {
         startingPosition = transform.position;
         otherGuards = GameObject.FindGameObjectsWithTag("Guard").Where(gameObject => gameObject != this.gameObject).ToList();
         roomWaypoints = GameObject.FindGameObjectsWithTag("RoomWaypoint").OrderBy(waypoint => waypoint.name).ToList();
-        Debug.Log(roomWaypoints.Count());
         Reset();
     }
 

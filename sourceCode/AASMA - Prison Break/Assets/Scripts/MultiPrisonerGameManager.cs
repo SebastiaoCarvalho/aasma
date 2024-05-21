@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MultiPrisonerGameManager : GameManager {
-    List<int> timesNumberOfEscaped = new List<int>(); // COunt of number of prisoners escaped
+    List<int> escapesOfPrisoner = new List<int>(); // Count times each prisoner escaped
     int prisonersPerRound = 0;
     List<Prisoner> remainingPrisoners = new List<Prisoner>();
     private int averageInciteAmount;
@@ -10,9 +10,9 @@ public class MultiPrisonerGameManager : GameManager {
 
     private new void Start() {
         base.Start();
-        timesNumberOfEscaped = new List<int>(); // acount for 0 escapee
-        for (int i = 0; i < prisoners.Count + 1; i++) {
-            timesNumberOfEscaped.Add(0);
+        escapesOfPrisoner = new List<int>(); // acount for 0 escapee
+        for (int i = 0; i < prisoners.Count; i++) {
+            escapesOfPrisoner.Add(0);
         }
         remainingPrisoners = new List<Prisoner>(prisoners);
     }
@@ -36,6 +36,7 @@ public class MultiPrisonerGameManager : GameManager {
         remainingPrisoners.Remove(prisoner);
         Debug.LogFormat("Remaining prisoners: {0}", remainingPrisoners.Count);
         prisonersPerRound++;
+        escapesOfPrisoner[prisoner.name[prisoner.name.Length - 1] - '0']++;
         if (remainingPrisoners.Count == 0) {
             runs++;
             ResetGame();
@@ -44,8 +45,6 @@ public class MultiPrisonerGameManager : GameManager {
 
     protected override void ResetGame() {
         Debug.Log("Prisoners escaped: " + prisonersPerRound);
-        Debug.Log(timesNumberOfEscaped.Count);
-        timesNumberOfEscaped[prisonersPerRound]++;
         prisonersPerRound = 0;
         base.ResetGame();
         remainingPrisoners = new List<Prisoner>(prisoners);
@@ -54,8 +53,8 @@ public class MultiPrisonerGameManager : GameManager {
     protected override void PrintStats()
     {
         Debug.LogFormat("Total simulations: {0}", runs);
-        for(int i = 0; i < timesNumberOfEscaped.Count; i++) {
-            Debug.LogFormat("Rounds with {0} escapees : {1}", i , timesNumberOfEscaped[i]);
+        for(int i = 0; i < escapesOfPrisoner.Count; i++) {
+            Debug.LogFormat("Prisoner {0} escaped {1} times ", i , escapesOfPrisoner[i]);
         }
         Debug.LogFormat("Average bribery amount: {0}", averageBriberyAmount);
     }

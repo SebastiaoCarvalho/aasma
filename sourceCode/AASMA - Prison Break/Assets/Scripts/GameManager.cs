@@ -1,12 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-    const int ENDRUNS = 100;
-
-    public bool canBribe = true;
-    public bool canIncite = true;
+    const int ENDRUNS = 10;
 
     // Statistics
     int prisonerWins = 0;
@@ -15,6 +13,7 @@ public class GameManager : MonoBehaviour {
     private float currentTimeToEscape = 0;
     int briberyTimes = 0;
     protected int runs = 0;
+    
 
 
     // Prisoners and Guards to respawn
@@ -77,7 +76,7 @@ public class GameManager : MonoBehaviour {
         Debug.LogFormat("Total simulations: {0}", runs);
         Debug.LogFormat("Prisoner wins: {0}", prisonerWins);
         Debug.LogFormat("Average time to escape: {0}", averageTimeToEscape);
-        if (canBribe) Debug.LogFormat("Average bribery amount: {0}", averageBriberyAmount);
+        if (prisoners.Any(pr => pr.canBribe)) Debug.LogFormat("Average bribery amount: {0}", averageBriberyAmount);
     }
 
 }
