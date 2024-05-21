@@ -45,7 +45,7 @@ public class Prisoner : Agent
         if (arrested) return;
         List<Action> actions = GetAvailableActions();
         if (canBribe)
-            foreach (Guard guard in guardInfo.Keys.ToList().Where(guard => guardInfo[guard] == currentRoom)) {
+            foreach (Guard guard in guardInfo.Keys.ToList().Where(guard => guardInfo[guard] == targetRoom)) {
                 if (guard.prisonersToIgnore.Contains(this)) continue;
                 Room room = roomWaypoints[guardInfo[guard] - 1].transform.parent.GetComponent<Room>();
                 actions.Add(new Bribe(this, guard, room));
