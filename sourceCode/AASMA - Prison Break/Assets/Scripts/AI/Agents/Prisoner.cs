@@ -11,6 +11,7 @@ public class Prisoner : Agent
     [SerializeField] List<GameObject> roomWaypoints = new List<GameObject>();
     private Action currentAction;
     private Dictionary<Guard, int> guardInfo = new Dictionary<Guard, int>();
+    private Dictionary<Guard, float> timeSinceLastSeen = new Dictionary<Guard, float>();
     private Prisoner lastSeen;
     int currentRoom = 2;
     public int targetRoom = 0;
@@ -31,6 +32,7 @@ public class Prisoner : Agent
     {
         currentAction = null;
         guardInfo.Clear();
+        timeSinceLastSeen.Clear();
         currentRoom = 2;
         targetRoom = 0;
         cash = 100;
@@ -84,7 +86,7 @@ public class Prisoner : Agent
     void Update()
     {
         if (escaped) return;
-
+        UpdateLastSeenGuards();
         if (currentAction != null && currentAction.IsDone()) {
             if (arrested) {
                 guardPerformingTheArrest.FinishArrest();
@@ -93,6 +95,14 @@ public class Prisoner : Agent
                 return;
             }
             ChooseAction();
+        }
+    }
+
+    private void UpdateLastSeenGuards() {
+        timeSinceLastSeen = timeSinceLastSeen.ToDictionary(pair => pair.Key, pair => pair.Value + Time.deltaTime);
+        foreach (Guard guard in timeSinceLastSeen.Keys.ToList().Where(guard => timeSinceLastSeen[guard] > 5)) {
+            RemoveGuardInfo(guard);
+            Debug.Log("Removing guard info");
         }
     }
 
@@ -158,10 +168,12 @@ public class Prisoner : Agent
     public void AddGuardInfo(Guard guard) {
         Debug.Log("Adding guard info");
         guardInfo[guard] = targetRoom;
+        timeSinceLastSeen[guard] = 0;
     }
 
     public void RemoveGuardInfo(Guard guard) {
         guardInfo.Remove(guard);
+        timeSinceLastSeen.Remove(guard);
     }
 
     public bool KnowsGuard(Guard guard) {
