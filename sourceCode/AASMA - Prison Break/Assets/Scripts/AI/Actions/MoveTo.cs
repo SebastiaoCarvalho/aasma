@@ -33,6 +33,6 @@ public class MoveTo : Action // Action used to move between rooms
 
     public override string ToString()
     {
-        return base.ToString() + " to " + room.name;
+        return base.ToString() + " to " + room.name + " from " + agent.currentRoom;
     }
 }

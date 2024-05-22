@@ -13,7 +13,7 @@ public class Prisoner : Agent
     private Dictionary<Guard, int> guardInfo = new Dictionary<Guard, int>();
     private Dictionary<Guard, float> timeSinceLastSeen = new Dictionary<Guard, float>();
     private Prisoner lastSeen;
-    int currentRoom = 2;
+    public int currentRoom = 2;
     public int targetRoom = 0;
     [SerializeField] public float cash = 67;
     bool escaped = false;

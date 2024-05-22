@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-    const int ENDRUNS = 10;
+    const int ENDRUNS = 1000;
 
     // Statistics
     int prisonerWins = 0;
@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour {
     protected void Start() {
         prisoners = new List<Prisoner>(FindObjectsOfType<Prisoner>());
         guards = new List<Guard>(FindObjectsOfType<Guard>());
+
     }
 
     protected void Update() {
@@ -66,6 +67,7 @@ public class GameManager : MonoBehaviour {
             PrintStats();
             UnityEditor.EditorApplication.isPlaying = false; // Stop the game
         }
+        Debug.LogWarningFormat("Starting run {0}", runs + 1);
         prisoners.ForEach(prisoner => prisoner.Reset());
         guards.ForEach(guard => guard.Reset());
         currentTimeToEscape = 0;
