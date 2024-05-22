@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class Incite : Action
 {
     // Action used when a prisoner incites other to go to be caught by a guard, allowing the inciter to escape
@@ -20,6 +22,7 @@ public class Incite : Action
         float neededUtility = currentUtilty * 1.1f;
         if (inciter.HasEnoughCash(neededUtility)) {
             inciter.Incite(incited, neededUtility, guard);
+            MultiPrisonerGameManager.Instance.AddInciteAmount(neededUtility);
         }
     }
 
@@ -30,7 +33,13 @@ public class Incite : Action
 
     public override float Utility()
     {
-        if (! inciter.HasGuardInfo()) return -10;
-        return 10; 
+        Debug.Log("Incite utility");
+        float currentUtilty = incited.Utility();
+        float neededUtility = currentUtilty * 1.1f;
+        if (! inciter.HasEnoughCash(neededUtility) || incited.arrested) {
+            return -10;
+        }
+        Debug.LogFormat("Needed utility: {0}, min bribe {1}", neededUtility, guard.MinAmountBribery);
+        return guard.MinAmountBribery - neededUtility;
     }
 }

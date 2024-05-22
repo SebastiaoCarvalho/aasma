@@ -10,8 +10,10 @@ public class GameManager : MonoBehaviour {
     int prisonerWins = 0;
     protected float averageBriberyAmount = 0;
     private float averageTimeToEscape = 0;
-    private float currentTimeToEscape = 0;
-    int briberyTimes = 0;
+    protected float currentTimeToEscape = 0;
+    protected int briberyTimes = 0;
+    protected float averageInciteAmount;
+    protected int inciteTimes;
     protected int runs = 0;
     
 
@@ -45,6 +47,12 @@ public class GameManager : MonoBehaviour {
         averageTimeToEscape = averageTimeToEscape * (runs - 1) + currentTimeToEscape;
         averageTimeToEscape /= runs;
         ResetGame();
+    }
+
+    public void AddInciteAmount(float amount) {
+        averageInciteAmount = averageInciteAmount * inciteTimes + amount;
+        inciteTimes++;
+        averageInciteAmount /= inciteTimes;
     }
 
     public void AddBriberyAmount(float amount) {

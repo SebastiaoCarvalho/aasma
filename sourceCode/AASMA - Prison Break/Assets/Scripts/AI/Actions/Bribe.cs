@@ -28,7 +28,7 @@ public class Bribe : Action
         float escapeVal = currentRoom.Utility / 10;
         float bribeVal = (100 - guard.MinAmountBribery) / 100;
 
-        return (bribeVal * 1.3f - escapeVal * .5f) * 10;
+        return (bribeVal * 0.8f + escapeVal * .5f) * 10;
     }
 
     public override void Execute()

@@ -10,7 +10,6 @@ public class Guard : Agent {
     [SerializeField] List<GameObject> waypoints = new List<GameObject>();
     [SerializeField] List<GameObject> roomWaypoints = new List<GameObject>();
     [SerializeField] float minAmountBribery = 0;
-    [SerializeField] float desiredAmountBribery = 0;
     [SerializeField] private float alertedSpeed = 11f;
     List <GameObject> otherGuards = new List<GameObject>();
     bool sleep = false;
@@ -164,7 +163,7 @@ public class Guard : Agent {
 
     public float NegotiateBribe(int negotiationStep, float proposalAmount) {
         // Guard has a probability of rejecting the bribe, which increases with the negotiation step (time)
-        float rejectionProb = negotiationStep * UnityEngine.Random.Range(0, 0.5f) + UnityEngine.Random.Range(0, 0.2f);
+        float rejectionProb = negotiationStep * UnityEngine.Random.Range(0, 0.5f) + UnityEngine.Random.Range(0, 0.9f);
         if (rejectionProb > 1) return -1;
 
         // Guard always counters offer with the minimum amount he is willing to accept, since prisoners value

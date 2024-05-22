@@ -14,7 +14,7 @@ public class Prisoner : Agent
     private Prisoner lastSeen;
     int currentRoom = 2;
     public int targetRoom = 0;
-    [SerializeField] public float cash = 100;
+    [SerializeField] public float cash = 67;
     bool escaped = false;
     public bool arrested = false;
     Guard guardPerformingTheArrest;
@@ -169,6 +169,7 @@ public class Prisoner : Agent
     }
 
     public void AddPrisonerInfo(Prisoner prisoner) {
+        Debug.LogWarning("Adding prisoner info");
         lastSeen = prisoner;
     }
 

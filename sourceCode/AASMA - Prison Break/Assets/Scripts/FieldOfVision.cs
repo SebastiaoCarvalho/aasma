@@ -85,7 +85,9 @@ class FieldOfVision : MonoBehaviour
         Debug.LogFormat("{0} detected {1}", holder, other);
         if (holder.CompareTag("Prisoner")) {
             if (other.CompareTag("Guard")) {
-                holder.GetComponent<Prisoner>().AddGuardInfo(other.GetComponent<Guard>());
+                Guard guard = other.GetComponent<Guard>();
+                if (guard.prisonersToIgnore.Contains(holder.GetComponent<Prisoner>())) return;
+                holder.GetComponent<Prisoner>().AddGuardInfo(guard);
             }
             else if (other.CompareTag("Prisoner")) {
                 holder.GetComponent<Prisoner>().AddPrisonerInfo(other.GetComponent<Prisoner>());
