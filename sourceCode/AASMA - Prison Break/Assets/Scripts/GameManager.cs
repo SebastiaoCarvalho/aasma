@@ -45,8 +45,8 @@ public class GameManager : MonoBehaviour {
     virtual public void PrisonerEscaped(Prisoner prisoner) {
         prisonerWins++;
         runs++;
-        averageTimeToEscape = averageTimeToEscape * (runs - 1) + currentTimeToEscape;
-        averageTimeToEscape /= runs;
+        averageTimeToEscape = averageTimeToEscape * (prisonerWins - 1) + currentTimeToEscape;
+        averageTimeToEscape /= prisonerWins;
         ResetGame();
     }
 

@@ -16,6 +16,7 @@ public class Prisoner : Agent
     public int currentRoom = 2;
     public int targetRoom = 0;
     [SerializeField] public float cash = 67;
+    float startingCash;
     bool escaped = false;
     public bool arrested = false;
     Guard guardPerformingTheArrest;
@@ -23,6 +24,7 @@ public class Prisoner : Agent
     new void Start()
     {
         base.Start();
+        startingCash = cash;
         startingPosition = transform.position;
         roomWaypoints = GameObject.FindGameObjectsWithTag("RoomWaypoint").OrderBy(waypoint => waypoint.name).ToList();
         Reset();
@@ -35,7 +37,7 @@ public class Prisoner : Agent
         timeSinceLastSeen.Clear();
         currentRoom = 2;
         targetRoom = 0;
-        cash = 100;
+        cash = startingCash;
         escaped = false;
         arrested = false;
         gameObject.SetActive(true);

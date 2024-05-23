@@ -54,7 +54,6 @@ public class MultiPrisonerGameManager : GameManager {
             Debug.LogFormat("Prisoner {0} escaped {1} times ", i , escapesOfPrisoner[i]);
             Debug.LogFormat("Average time to escape for Prisoner {0}: {1}", i, averageTimeToEscape[i]);
         }
-        Debug.LogFormat("Average time to escape: {0}", averageTimeToEscape);
         Debug.LogFormat("Average bribery amount: {0}", averageBriberyAmount);
         Debug.LogFormat("Number of bribes: {0}", briberyTimes);
         Debug.LogFormat("Average incite amount: {0}", averageInciteAmount);
