@@ -21,6 +21,9 @@ public class MoveTo : Action // Action used to move between rooms
 
     public override bool IsDone()
     {
+        if (Vector3.Distance(agent.transform.position, target) < 1)  {
+            agent.currentRoom = room.roomNumber;
+        }
         return Vector3.Distance(agent.transform.position, target) < 1;
     }
 
